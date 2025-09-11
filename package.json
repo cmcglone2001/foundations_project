@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.887.0",
+    "@aws-sdk/lib-dynamodb": "^3.887.0",
+    "bcrypt": "^6.0.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^13.0.0",
+    "winston": "^3.17.0"
+  },
+  "name": "foundations_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
