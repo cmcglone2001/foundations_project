@@ -1,32 +1,33 @@
 const jwt = require("jsonwebtoken");
-const {logger} = require("./logger");
+const { logger } = require("./logger");
 
 const secretKey = "my-secret-key";
 
-async function authenticateToken(req, res, next){
-    // Authorization: "Bearer tokenstring"
+async function authenticateToken(req, res, next) {
 
     const authHeader = req.headers["Authorization"];
     const token = authHeader && authHeader.split(" ")[1];
+    logger.info(`Token from auth: ${token}`);
 
-    if(!token){
+    if (!token) {
         res.status(400).json({message: "forbidden access"});
-    }else{
+    } else {
         const user = await decodeJWT(token);
-        if(user){
-            req.user = user; // You generally should not modify the incoming req
+        if (user) {
+            req.user = user;
+            logger.info(`Token authenticated: ${JSON.stringify(req.user)}`)
             next();
-        }else{
+        } else {
             res.status(400).json({message: "Bad JWT"});
         }
     }
 }
 
 async function decodeJWT(token){
-    try{
+    try {
         const user = await jwt.verify(token, secretKey);
         return user;
-    }catch(error){
+    } catch (error) {
         logger.error(err);
         return null;
     }
@@ -34,4 +35,4 @@ async function decodeJWT(token){
 
 module.exports = {
     authenticateToken
-}
+};

@@ -21,4 +21,5 @@ function loggerMiddleware(req, res, next){
 
 module.exports = {
   logger,
-  loggerMiddleware}
+  loggerMiddleware
+};

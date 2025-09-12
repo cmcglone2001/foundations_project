@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
-const {logger, loggerMiddleware} = require('./util/logger');
-const {authenticateToken} = require("./util/jwt");
+const { logger, loggerMiddleware } = require("./src/util/logger");
+const { authenticateToken } = require("./src/util/jwt");
 
-const userController = require('./controller/userController');
+const userController = require('./src/controller/userController');
 
 const PORT = 3000;
 
