@@ -23,7 +23,6 @@ async function postUser(user) {
     }
 }
 
-
 async function getUserByUsername(username) {
     const command = new ScanCommand({
         TableName,

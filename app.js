@@ -4,6 +4,7 @@ const { logger, loggerMiddleware } = require("./src/util/logger");
 const { authenticateToken } = require("./src/util/jwt");
 
 const userController = require('./src/controller/userController');
+const ticketController = require('./src/controller/ticketController');
 
 const PORT = 3000;
 
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(loggerMiddleware);
 
 app.use("/users", userController);
+app.use("/tickets", ticketController)
 
 app.get("/", (req, res) => {
     res.send("Home Page");

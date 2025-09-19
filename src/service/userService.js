@@ -1,7 +1,6 @@
 const userDAO = require('../repository/userDAO');
-// const uuid = require('uuid');
 const bcrypt = require('bcrypt');
-const {logger} = require("../util/logger")
+const { logger } = require("../util/logger")
 
 const secretKey = "my-secret-key";
 
