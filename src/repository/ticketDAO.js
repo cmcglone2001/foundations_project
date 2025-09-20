@@ -23,7 +23,7 @@ async function postTicket(ticket) {
     }
 }
 
-async function getPendingTickets() {
+async function getAllPendingTickets() {
     const command = new QueryCommand({
         TableName,
         IndexName: "status-index",
@@ -40,6 +40,56 @@ async function getPendingTickets() {
         logger.error(error);
         return null;
     }
+}
+
+async function getTicketsByStatus(username = null, status = null) {
+//     logger.info(`Passed to GTBS User: ${username} | Status: ${status}`);
+//     let command = null;
+//     if (username && status) {
+//         logger.info("User and status passed");
+//         command = new QueryCommand({
+//             TableName,
+//             IndexName: "author-status-index",
+//             KeyConditionExpression: "#author = :author AND #status = :status",
+//             ExpressionAttributeNames: {
+//                 "#author" : "author",
+//                 "#status" : "status"
+//             },
+//             ExpressionAttributeValues: {
+//                 ":author" : username,
+//                 ":status" : status
+//             }
+//         });
+//     } else if (username == null && status) {
+//         logger.info("Status passed");
+//         command = new QueryCommand({
+//             TableName,
+//             IndexName: "status-index",
+//             KeyConditionExpression: "#status = :status",
+//             ExpressionAttributeNames: {"#status" : "status"},
+//             ExpressionAttributeValues: {":status" : status}
+//         });
+//     } else if (username && status == null) {
+//         logger.info("User passed");
+//         command = new QueryCommand({
+//             TableName,
+//             IndexName: "author-index",
+//             KeyConditionExpression: "#author = :author",
+//             ExpressionAttributeNames: {"#author" : "author"},
+//             ExpressionAttributeValues: {":author" : username}
+//         });
+//     } else {
+//         return null;
+//     }
+
+//     try {
+//         const data = await documentClient.send(command);
+//         logger.info(`Query command to database complete ${JSON.stringify(data.Items)}`);
+//         return data.Items;
+//     } catch (error) {
+//         logger.error(error);
+//         return null;
+//     }
 }
 
 async function getTicketsByUsername(username) {
@@ -97,7 +147,8 @@ async function countTickets() {
 
 module.exports = {
     postTicket,
-    getPendingTickets,
+    getAllPendingTickets,
+    getTicketsByStatus,
     getTicketsByUsername,
     getTicketById,
     countTickets

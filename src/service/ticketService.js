@@ -5,7 +5,9 @@ let nextId = 0;
 
 async function postTicket(user, ticket) {
     //logger.info(`Count - ${nextId}`);
-    if (validateTicket(ticket)) {
+    if (user.role === "manager") {
+        return "Managers cannot submit tickets";
+    } else if (validateTicket(ticket)) {
         const data = await ticketDAO.postTicket({
             ticket_id: nextId,
             amount: ticket.amount,
@@ -19,15 +21,15 @@ async function postTicket(user, ticket) {
         return nextId-1;
     } else {
         let message = "Ticket submission failed:";
-        if (ticket.amount == undefined || ticket.amount <= 0) { message += "\nTicket must have an amount"};
-        if (ticket.description == undefined || ticket.description.length <= 0) { message += "\nTicket must have a description"};
+        if (ticket.amount == undefined || ticket.amount <= 0) { message += " | Ticket must have an amount"};
+        if (ticket.description == undefined || ticket.description.length <= 0) { message += " | Ticket must have a description"};
         logger.info(`Failed to validate ticket: ${JSON.stringify(ticket)}`);
         return message;
     }
 }
 
-async function getPendingTickets() {
-    const data = await ticketDAO.getPendingTickets();
+async function getAllPendingTickets() {
+    const data = await ticketDAO.getAllPendingTickets();
     if (data) {
         logger.info(`Pending tickets found: ${JSON.stringify(data)}`);
         return data.sort((a,b) => a.ticket_id - b.ticket_id);
@@ -52,6 +54,17 @@ async function getTicketsByUsername(username) {
         logger.info(`No username found: ${username}`)
         return "Username not found"
     }
+}
+
+async function getTicketsByStatus(username = null, status = null) {
+//     const data = await ticketDAO.getTicketsByStatus(username, status);
+//     if (data) {
+//         logger.info(`Tickets found by username and status: ${JSON.stringify(data)}`);
+//         return data.sort((a,b) => a.ticket_id - b.ticket_id);
+//     } else {
+//         logger.info(`Error searching for tickets by username and status: ${username}`);
+//         return "An error has occured";
+//     }
 }
 
 async function getTicketById(ticketId) {
@@ -102,7 +115,7 @@ async function verifyLegalProcess(ticketId, response) {
     }
 
     if (ticket && ticket.status == "Pending") { return ticket; }
-    else if (ticket && ticket.status != "Pending") { return `Ticket #${ticketId} has already been processed\n${JSON.stringify(ticket)}`; }
+    else if (ticket && ticket.status != "Pending") { return `Ticket #${ticketId} has already been processed | author: ${ticket.author} | resolver: ${ticket.resolver} | status: ${ticket.status}`; }
     else { return `Ticket #${ticketId} not found`; }
 }
 
@@ -126,7 +139,8 @@ countTickets();
 
 module.exports = {
     postTicket,
-    getPendingTickets,
+    getAllPendingTickets,
+    getTicketsByStatus,
     getTicketsByUsername,
     getTicketById,
     handleTicket,

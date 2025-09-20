@@ -12,9 +12,9 @@ const { authenticateToken } = require("../util/jwt");
 router.post("/register", validatePostUser, async (req, res) => {
     const data = await userService.postUser(req.body);
     if (data == "taken") {
-        res.status(403).send(`Username already taken`);
+        res.status(403).json({message: `Username already taken`});
     } else if (data) {
-        res.status(201).send(`Created User: ${req.body.username}`);
+        res.status(201).json({message: `Created User: ${req.body.username}`});
     } else {
         res.status(400).json({message: "User not created", data: req.body});
     }
@@ -35,9 +35,9 @@ router.post("/login", async (req, res) => {
                 expiresIn: "3h"
             }
         );
-        res.status(200).send(`Logged in as ${data.role} ${data.username}\nToken: ${token}`);
+        res.status(200).json({message: `Logged in as ${data.role} ${data.username}`, token: token});
     } else {
-        res.status(400).send("Username or Password is incorrect");
+        res.status(400).json({message: "Username or Password is incorrect"});
     }
 })
 
@@ -45,12 +45,12 @@ router.get("/tickets", authenticateToken, async (req, res) => {
     const data = await ticketService.getTicketsByUsername(req.user.username);
     if (typeof data === 'object') {
         if (data.length > 0) {
-            res.status(200).send(`${req.user.username}'s tickets:\n${JSON.stringify(data)}`);
+            res.status(200).json({message: `${req.user.username}'s tickets:`, tickets: data});
         } else {
-            res.status(200).send(`${req.user.username}'s tickets:\nNo tickets found`);
+            res.status(200).json({message: `No tickets found`});
         } 
     } else {
-        res.status(400).send(data);
+        res.status(400).json({message: data});
     }
 });
 
